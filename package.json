@@ -1,0 +1,10 @@
+{
+  "name": "@playground/mcp-memory",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/memory.mcp.ts",
+  "dependencies": {
+    "@playground/mcp-core": "workspace:*",
+    "@playground/helpers": "workspace:*"
+  }
+}
