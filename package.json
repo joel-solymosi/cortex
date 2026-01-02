@@ -12,7 +12,7 @@
   "dependencies": {
     "@gym/mcp-core": "workspace:*",
     "@gym/helpers": "workspace:*",
-    "preact": "^10.25.4"
+    "preact": "^10.26.9"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
