@@ -302,6 +302,12 @@ if (isMainEntry(import.meta.url)) {
         // Pre-initialize the memory store
         console.log('Starting memory MCP server...');
         await ensureStore();
-        await createServer({ 'memory': mcpServer });
+
+        // Import web router
+        const { createMemoryWebRouter } = await import('./memory.web');
+        const webRouter = createMemoryWebRouter();
+
+        await createServer({ 'memory': mcpServer }, [webRouter]);
+        console.log('Memory web viewer available at: http://localhost:8010/memory');
     })();
 }

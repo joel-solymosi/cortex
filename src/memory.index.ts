@@ -329,6 +329,21 @@ export class MemoryStore {
             indexedCount: this.index.getDocumentCount(),
         };
     }
+
+    /**
+     * Get all chunk IDs
+     */
+    getAllIds(): string[] {
+        return this.storage.getAllIds();
+    }
+
+    /**
+     * Get all chunks (for web viewer listing)
+     */
+    async getAllChunks(): Promise<Chunk[]> {
+        const ids = this.storage.getAllIds();
+        return this.storage.readMany(ids);
+    }
 }
 
 // Singleton instance

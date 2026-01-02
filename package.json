@@ -3,8 +3,19 @@
   "version": "1.0.0",
   "type": "module",
   "main": "./src/memory.mcp.ts",
+  "scripts": {
+    "build:web": "npx tsx web/esbuild.config.ts",
+    "watch:web": "npx tsx web/esbuild.config.ts --watch",
+    "serve": "npx tsx src/memory.mcp.ts",
+    "dev": "concurrently -n web,server -c cyan,green \"pnpm watch:web\" \"pnpm serve\""
+  },
   "dependencies": {
     "@gym/mcp-core": "workspace:*",
-    "@gym/helpers": "workspace:*"
+    "@gym/helpers": "workspace:*",
+    "preact": "^10.25.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "esbuild": "^0.27.2"
   }
 }
