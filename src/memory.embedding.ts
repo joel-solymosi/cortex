@@ -2,7 +2,7 @@
 
 import { pipeline } from '@xenova/transformers';
 import hnswlib from 'hnswlib-node';
-import { isMainEntry } from '@playground/helpers/common';
+import { isMainEntry } from '@gym/helpers/common';
 
 interface TransformerTensor {
     dims: number[];

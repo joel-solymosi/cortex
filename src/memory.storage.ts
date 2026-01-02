@@ -6,7 +6,7 @@ import crypto from 'crypto';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { Chunk, ChunkRelation } from './memory.types';
 
-import { isMainEntry } from '@playground/helpers/common';
+import { isMainEntry } from '@gym/helpers/common';
 import { getChunkDefaults } from './memory.types';
 import os from 'os';
 

@@ -5,8 +5,8 @@ import { fileURLToPath } from 'url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { isMainEntry } from '@playground/helpers/common';
-import { createServer } from '@playground/mcp-core';
+import { isMainEntry } from '@gym/helpers/common';
+import { createServer } from '@gym/mcp-core';
 import { getMemoryStore } from './memory.index';
 import { ChunkType, EpistemicStatus, LifecycleStatus } from './memory.types';
 
