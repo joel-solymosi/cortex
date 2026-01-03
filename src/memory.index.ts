@@ -354,6 +354,7 @@ let memoryStore: MemoryStore | null = null;
  */
 export async function getMemoryStore(dataDir?: string): Promise<MemoryStore> {
     if (!memoryStore) {
+        dataDir = dataDir || process.env.MEMORY_DATA_DIR;
         if (!dataDir) {
             throw new Error('dataDir required for first initialization');
         }

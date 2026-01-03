@@ -1,27 +1,6 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+/* Memory App specific styles */
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    background: #1a1a1a;
-    color: #e0e0e0;
-    height: 100vh;
-    overflow: hidden;
-}
-
-#root {
-    height: 100%;
-}
-
-.app-container {
-    display: flex;
-    height: 100%;
-}
-
-.loading {
+.memory-loading {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,7 +11,7 @@ body {
 }
 
 /* Sidebar */
-.sidebar {
+.memory-sidebar {
     width: 320px;
     height: 100%;
     background: #1e1e1e;
@@ -42,7 +21,7 @@ body {
     flex-shrink: 0;
 }
 
-.sidebar-header {
+.memory-sidebar-header {
     padding: 16px;
     border-bottom: 1px solid #333;
     display: flex;
@@ -50,13 +29,13 @@ body {
     align-items: center;
 }
 
-.sidebar-header h1 {
+.memory-sidebar-header h1 {
     font-size: 1.1rem;
     font-weight: 600;
     color: #9b6bff;
 }
 
-.chunk-count {
+.memory-chunk-count {
     font-size: 0.75rem;
     color: #666;
     background: #2a2a2a;
@@ -64,13 +43,13 @@ body {
     border-radius: 12px;
 }
 
-.chunk-list {
+.memory-chunk-list {
     flex: 1;
     overflow-y: auto;
     padding: 8px;
 }
 
-.chunk-item {
+.memory-chunk-item {
     background: #2a2a2a;
     border: 1px solid #333;
     border-radius: 6px;
@@ -80,24 +59,24 @@ body {
     transition: all 0.2s;
 }
 
-.chunk-item:hover {
+.memory-chunk-item:hover {
     background: #333;
     border-color: #444;
 }
 
-.chunk-item.selected {
+.memory-chunk-item.selected {
     background: #1e3a5f;
     border-color: #6b9fff;
 }
 
-.chunk-item-header {
+.memory-chunk-item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
 }
 
-.chunk-id {
+.memory-chunk-id {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.75rem;
     color: #888;
@@ -106,13 +85,13 @@ body {
     border-radius: 4px;
 }
 
-.chunk-type {
+.memory-chunk-type {
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
 }
 
-.chunk-summary {
+.memory-chunk-summary {
     font-size: 0.9rem;
     line-height: 1.4;
     color: #e0e0e0;
@@ -123,20 +102,20 @@ body {
     overflow: hidden;
 }
 
-.chunk-status {
+.memory-chunk-status {
     font-size: 0.7rem;
     text-transform: uppercase;
 }
 
 /* Main Content */
-.main-content {
+.memory-main-content {
     flex: 1;
     overflow-y: auto;
     padding: 24px;
     min-width: 0;
 }
 
-.no-selection {
+.memory-no-selection {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -146,32 +125,23 @@ body {
     text-align: center;
 }
 
-.no-selection h2 {
+.memory-no-selection h2 {
     font-size: 1.2rem;
     font-weight: 500;
     margin-bottom: 8px;
 }
 
-.no-selection p {
+.memory-no-selection p {
     font-size: 0.9rem;
 }
 
-.error-message {
-    background: #3d1f1f;
-    border: 1px solid #5c2a2a;
-    color: #ff6b6b;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 16px;
-}
-
 /* Chunk Detail */
-.chunk-detail {
+.memory-chunk-detail {
     max-width: 800px;
     margin: 0 auto;
 }
 
-.chunk-detail-header {
+.memory-chunk-detail-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -180,7 +150,7 @@ body {
     border-bottom: 1px solid #333;
 }
 
-.chunk-detail-header h2 {
+.memory-chunk-detail-header h2 {
     font-size: 1.4rem;
     font-weight: 600;
     color: #e0e0e0;
@@ -188,7 +158,7 @@ body {
     margin-right: 16px;
 }
 
-.chunk-id-large {
+.memory-chunk-id-large {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9rem;
     color: #888;
@@ -199,7 +169,7 @@ body {
 }
 
 /* Meta Sections */
-.meta-section {
+.memory-meta-section {
     background: #252525;
     border: 1px solid #333;
     border-radius: 8px;
@@ -207,7 +177,7 @@ body {
     margin-bottom: 16px;
 }
 
-.meta-section h3 {
+.memory-meta-section h3 {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -215,31 +185,31 @@ body {
     margin-bottom: 12px;
 }
 
-.meta-grid {
+.memory-meta-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 12px;
 }
 
-.meta-item {
+.memory-meta-item {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.meta-label {
+.memory-meta-label {
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     color: #666;
 }
 
-.meta-value {
+.memory-meta-value {
     font-size: 0.9rem;
     color: #e0e0e0;
 }
 
-.meta-value.badge {
+.memory-badge {
     display: inline-block;
     padding: 4px 10px;
     border-radius: 4px;
@@ -250,13 +220,13 @@ body {
 }
 
 /* Tags */
-.tags {
+.memory-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
-.tag {
+.memory-tag {
     background: #1a2a1a;
     border: 1px solid #2d4a2d;
     color: #8bbb8b;
@@ -265,20 +235,20 @@ body {
     font-size: 0.8rem;
 }
 
-.no-tags {
+.memory-no-tags {
     color: #666;
     font-style: italic;
     font-size: 0.85rem;
 }
 
 /* Related Chunks */
-.related-list {
+.memory-related-list {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.related-item {
+.memory-related-item {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -290,12 +260,12 @@ body {
     transition: all 0.2s;
 }
 
-.related-item:hover {
+.memory-related-item:hover {
     background: #333;
     border-color: #6b9fff;
 }
 
-.related-id {
+.memory-related-id {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.8rem;
     color: #6b9fff;
@@ -305,13 +275,13 @@ body {
     flex-shrink: 0;
 }
 
-.related-reason {
+.memory-related-reason {
     font-size: 0.85rem;
     color: #888;
 }
 
 /* Context Notes */
-.context-notes {
+.memory-context-notes {
     background: #1a1a1a;
     border: 1px solid #333;
     border-radius: 4px;
@@ -323,14 +293,14 @@ body {
 }
 
 /* Content Section */
-.content-section {
+.memory-content-section {
     background: #252525;
     border: 1px solid #333;
     border-radius: 8px;
     padding: 16px;
 }
 
-.content-section h3 {
+.memory-content-section h3 {
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
@@ -338,7 +308,7 @@ body {
     margin-bottom: 12px;
 }
 
-.chunk-content {
+.memory-chunk-content {
     background: #1f1f1f;
     border: 1px solid #333;
     border-radius: 6px;
@@ -348,22 +318,4 @@ body {
     color: #e0e0e0;
     white-space: pre-wrap;
     word-break: break-word;
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #1a1a1a;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #444;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555;
 }

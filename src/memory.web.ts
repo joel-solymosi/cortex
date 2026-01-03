@@ -1,11 +1,7 @@
 // Web API router for Memory Viewer
 
 import express, { Router, Request, Response } from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { getMemoryStore } from './memory.index';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function createMemoryWebRouter(): Router {
     const router = express.Router();
@@ -49,28 +45,7 @@ export function createMemoryWebRouter(): Router {
         }
     });
 
-    // Serve static files from web/dist (JS, CSS)
-    const distPath = path.join(__dirname, '..', 'web', 'dist');
-    router.use('/memory', express.static(distPath));
-
-    // Serve index.html for SPA routing
-    const indexPath = path.join(__dirname, '..', 'web', 'index.html');
-
-    // Main memory viewer page
-    router.get('/memory', (_req: Request, res: Response) => {
-        res.sendFile(indexPath);
-    });
-
-    // SPA catch-all for chunk IDs (validate 6-char hex in handler)
-    router.get('/memory/:id', (req: Request, res: Response, next) => {
-        const id = req.params.id;
-        // Only serve index.html for valid 6-char hex chunk IDs
-        if (/^[a-f0-9]{6}$/.test(id)) {
-            res.sendFile(indexPath);
-        } else {
-            next();
-        }
-    });
+    // Static file serving and SPA routes are now handled by packages/app
 
     return router;
 }

@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "main": "./src/memory.mcp.ts",
+  "exports": {
+    ".": "./src/memory.mcp.ts",
+    "./web": "./web/src/index.ts",
+    "./memory.web": "./src/memory.web.ts"
+  },
   "scripts": {
     "build:web": "npx tsx web/esbuild.config.ts",
     "watch:web": "npx tsx web/esbuild.config.ts --watch",

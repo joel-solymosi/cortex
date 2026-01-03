@@ -9,6 +9,7 @@ import { isMainEntry } from '@gym/helpers/common';
 import { createServer } from '@gym/mcp-core';
 import { getMemoryStore } from './memory.index';
 import { ChunkType, EpistemicStatus, LifecycleStatus } from './memory.types';
+import { createMemoryWebRouter } from './memory.web';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -304,7 +305,7 @@ if (isMainEntry(import.meta.url)) {
         await ensureStore();
 
         // Import web router
-        const { createMemoryWebRouter } = await import('./memory.web');
+
         const webRouter = createMemoryWebRouter();
 
         await createServer({ 'memory': mcpServer }, [webRouter]);

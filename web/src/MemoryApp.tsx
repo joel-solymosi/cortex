@@ -1,31 +1,8 @@
-import { render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
-import './index.css';
+import type { Chunk } from '../../src/memory.types';
+import './memory.css';
 
-interface ChunkRelation {
-    id: string;
-    reason: string;
-}
-
-interface Chunk {
-    id: string;
-    content: string;
-    summary: string;
-    type: string;
-    epistemic: string;
-    status: string;
-    surface_tags: string[];
-    related: ChunkRelation[];
-    created: string;
-    updated: string;
-    accessed: string;
-    retrieved_count: number;
-    relevant_count: number;
-    last_relevant_date: string | null;
-    expires?: string;
-    context_notes?: string;
-}
-
+// Minimal chunk info for sidebar listing
 interface ChunkListItem {
     id: string;
     summary: string;
@@ -33,7 +10,7 @@ interface ChunkListItem {
     status: string;
 }
 
-function App() {
+export function MemoryApp() {
     const [chunks, setChunks] = useState<ChunkListItem[]>([]);
     const [selectedChunk, setSelectedChunk] = useState<Chunk | null>(null);
     const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -140,37 +117,37 @@ function App() {
     if (loading) {
         return (
             <div class="app-container">
-                <div class="loading">Loading memory chunks...</div>
+                <div class="memory-loading">Loading memory chunks...</div>
             </div>
         );
     }
 
     return (
         <div class="app-container">
-            <aside class="sidebar">
-                <header class="sidebar-header">
+            <aside class="memory-sidebar">
+                <header class="memory-sidebar-header">
                     <h1 onClick={navigateToList} style={{ cursor: 'pointer' }}>Memory Viewer</h1>
-                    <span class="chunk-count">{chunks.length} chunks</span>
+                    <span class="memory-chunk-count">{chunks.length} chunks</span>
                 </header>
-                <div class="chunk-list">
+                <div class="memory-chunk-list">
                     {chunks.map(chunk => (
                         <div
                             key={chunk.id}
-                            class={`chunk-item ${selectedId === chunk.id ? 'selected' : ''}`}
+                            class={`memory-chunk-item ${selectedId === chunk.id ? 'selected' : ''}`}
                             onClick={() => navigateToChunk(chunk.id)}
                         >
-                            <div class="chunk-item-header">
-                                <span class="chunk-id">{chunk.id}</span>
+                            <div class="memory-chunk-item-header">
+                                <span class="memory-chunk-id">{chunk.id}</span>
                                 <span
-                                    class="chunk-type"
+                                    class="memory-chunk-type"
                                     style={{ color: getTypeColor(chunk.type) }}
                                 >
                                     {chunk.type}
                                 </span>
                             </div>
-                            <div class="chunk-summary">{chunk.summary}</div>
+                            <div class="memory-chunk-summary">{chunk.summary}</div>
                             <span
-                                class="chunk-status"
+                                class="memory-chunk-status"
                                 style={{ color: getStatusColor(chunk.status) }}
                             >
                                 {chunk.status}
@@ -179,46 +156,46 @@ function App() {
                     ))}
                 </div>
             </aside>
-            <main class="main-content">
+            <main class="memory-main-content">
                 {error && <div class="error-message">{error}</div>}
                 {!selectedChunk && !error && (
-                    <div class="no-selection">
+                    <div class="memory-no-selection">
                         <h2>Select a chunk from the sidebar</h2>
                         <p>Or navigate to /memory/[chunk-id] directly</p>
                     </div>
                 )}
                 {selectedChunk && (
-                    <article class="chunk-detail">
-                        <header class="chunk-detail-header">
+                    <article class="memory-chunk-detail">
+                        <header class="memory-chunk-detail-header">
                             <h2>{selectedChunk.summary}</h2>
-                            <span class="chunk-id-large">{selectedChunk.id}</span>
+                            <span class="memory-chunk-id-large">{selectedChunk.id}</span>
                         </header>
 
-                        <section class="meta-section">
+                        <section class="memory-meta-section">
                             <h3>Classification</h3>
-                            <div class="meta-grid">
-                                <div class="meta-item">
-                                    <span class="meta-label">Type</span>
+                            <div class="memory-meta-grid">
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Type</span>
                                     <span
-                                        class="meta-value badge"
+                                        class="memory-meta-value memory-badge"
                                         style={{ backgroundColor: getTypeColor(selectedChunk.type) + '33', color: getTypeColor(selectedChunk.type) }}
                                     >
                                         {selectedChunk.type}
                                     </span>
                                 </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">Epistemic</span>
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Epistemic</span>
                                     <span
-                                        class="meta-value badge"
+                                        class="memory-meta-value memory-badge"
                                         style={{ backgroundColor: getEpistemicColor(selectedChunk.epistemic) + '33', color: getEpistemicColor(selectedChunk.epistemic) }}
                                     >
                                         {selectedChunk.epistemic}
                                     </span>
                                 </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">Status</span>
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Status</span>
                                     <span
-                                        class="meta-value badge"
+                                        class="memory-meta-value memory-badge"
                                         style={{ backgroundColor: getStatusColor(selectedChunk.status) + '33', color: getStatusColor(selectedChunk.status) }}
                                     >
                                         {selectedChunk.status}
@@ -227,90 +204,90 @@ function App() {
                             </div>
                         </section>
 
-                        <section class="meta-section">
+                        <section class="memory-meta-section">
                             <h3>Tags</h3>
-                            <div class="tags">
+                            <div class="memory-tags">
                                 {selectedChunk.surface_tags.map(tag => (
-                                    <span key={tag} class="tag">{tag}</span>
+                                    <span key={tag} class="memory-tag">{tag}</span>
                                 ))}
                                 {selectedChunk.surface_tags.length === 0 && (
-                                    <span class="no-tags">No tags</span>
+                                    <span class="memory-no-tags">No tags</span>
                                 )}
                             </div>
                         </section>
 
                         {selectedChunk.related.length > 0 && (
-                            <section class="meta-section">
+                            <section class="memory-meta-section">
                                 <h3>Related Chunks</h3>
-                                <div class="related-list">
+                                <div class="memory-related-list">
                                     {selectedChunk.related.map(rel => (
                                         <div
                                             key={rel.id}
-                                            class="related-item"
+                                            class="memory-related-item"
                                             onClick={() => navigateToChunk(rel.id)}
                                         >
-                                            <span class="related-id">{rel.id}</span>
-                                            <span class="related-reason">{rel.reason}</span>
+                                            <span class="memory-related-id">{rel.id}</span>
+                                            <span class="memory-related-reason">{rel.reason}</span>
                                         </div>
                                     ))}
                                 </div>
                             </section>
                         )}
 
-                        <section class="meta-section">
+                        <section class="memory-meta-section">
                             <h3>Timestamps</h3>
-                            <div class="meta-grid">
-                                <div class="meta-item">
-                                    <span class="meta-label">Created</span>
-                                    <span class="meta-value">{formatDate(selectedChunk.created)}</span>
+                            <div class="memory-meta-grid">
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Created</span>
+                                    <span class="memory-meta-value">{formatDate(selectedChunk.created)}</span>
                                 </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">Updated</span>
-                                    <span class="meta-value">{formatDate(selectedChunk.updated)}</span>
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Updated</span>
+                                    <span class="memory-meta-value">{formatDate(selectedChunk.updated)}</span>
                                 </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">Accessed</span>
-                                    <span class="meta-value">{formatDate(selectedChunk.accessed)}</span>
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Accessed</span>
+                                    <span class="memory-meta-value">{formatDate(selectedChunk.accessed)}</span>
                                 </div>
                                 {selectedChunk.expires && (
-                                    <div class="meta-item">
-                                        <span class="meta-label">Expires</span>
-                                        <span class="meta-value">{formatDate(selectedChunk.expires)}</span>
+                                    <div class="memory-meta-item">
+                                        <span class="memory-meta-label">Expires</span>
+                                        <span class="memory-meta-value">{formatDate(selectedChunk.expires)}</span>
                                     </div>
                                 )}
                             </div>
                         </section>
 
-                        <section class="meta-section">
+                        <section class="memory-meta-section">
                             <h3>Metrics</h3>
-                            <div class="meta-grid">
-                                <div class="meta-item">
-                                    <span class="meta-label">Retrieved</span>
-                                    <span class="meta-value">{selectedChunk.retrieved_count} times</span>
+                            <div class="memory-meta-grid">
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Retrieved</span>
+                                    <span class="memory-meta-value">{selectedChunk.retrieved_count} times</span>
                                 </div>
-                                <div class="meta-item">
-                                    <span class="meta-label">Marked Relevant</span>
-                                    <span class="meta-value">{selectedChunk.relevant_count} times</span>
+                                <div class="memory-meta-item">
+                                    <span class="memory-meta-label">Marked Relevant</span>
+                                    <span class="memory-meta-value">{selectedChunk.relevant_count} times</span>
                                 </div>
                                 {selectedChunk.last_relevant_date && (
-                                    <div class="meta-item">
-                                        <span class="meta-label">Last Relevant</span>
-                                        <span class="meta-value">{formatDate(selectedChunk.last_relevant_date)}</span>
+                                    <div class="memory-meta-item">
+                                        <span class="memory-meta-label">Last Relevant</span>
+                                        <span class="memory-meta-value">{formatDate(selectedChunk.last_relevant_date)}</span>
                                     </div>
                                 )}
                             </div>
                         </section>
 
                         {selectedChunk.context_notes && (
-                            <section class="meta-section">
+                            <section class="memory-meta-section">
                                 <h3>Context Notes</h3>
-                                <div class="context-notes">{selectedChunk.context_notes}</div>
+                                <div class="memory-context-notes">{selectedChunk.context_notes}</div>
                             </section>
                         )}
 
-                        <section class="content-section">
+                        <section class="memory-content-section">
                             <h3>Content</h3>
-                            <div class="chunk-content">{selectedChunk.content}</div>
+                            <div class="memory-chunk-content">{selectedChunk.content}</div>
                         </section>
                     </article>
                 )}
@@ -318,5 +295,3 @@ function App() {
         </div>
     );
 }
-
-render(<App />, document.getElementById('root')!);
