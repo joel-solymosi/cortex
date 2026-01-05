@@ -1,39 +1,90 @@
 import { useState, useEffect } from 'preact/hooks';
+import Router, { route } from 'preact-router';
 import type { Chunk } from '../../src/memory.types';
+import { Sidebar } from './components/Sidebar';
+import { ChunkDetail } from './components/ChunkDetail';
+import { SearchResults } from './components/SearchResults';
 import './memory.css';
 
 // Minimal chunk info for sidebar listing
-interface ChunkListItem {
+export interface ChunkListItem {
     id: string;
     summary: string;
     type: string;
     status: string;
 }
 
-export function MemoryApp() {
-    const [chunks, setChunks] = useState<ChunkListItem[]>([]);
-    const [selectedChunk, setSelectedChunk] = useState<Chunk | null>(null);
-    const [selectedId, setSelectedId] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
+// Route component props from preact-router
+interface RouteProps {
+    path?: string;
+    matches?: Record<string, string>;
+}
+
+function ListView(_props: RouteProps) {
+    return (
+        <div class="memory-no-selection">
+            <h2>Select a chunk from the sidebar</h2>
+            <p>Or navigate to /memory/[chunk-id] directly</p>
+        </div>
+    );
+}
+
+function ChunkView({ id }: RouteProps & { id?: string }) {
+    const [chunk, setChunk] = useState<Chunk | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // Parse URL on mount and handle browser navigation
     useEffect(() => {
-        const handleUrl = () => {
-            const path = window.location.pathname;
-            const match = path.match(/\/memory\/([a-f0-9]{6})/);
-            if (match) {
-                setSelectedId(match[1]);
-            } else {
-                setSelectedId(null);
-                setSelectedChunk(null);
-            }
-        };
+        if (!id) return;
+        setChunk(null);
+        setError(null);
 
-        handleUrl();
-        window.addEventListener('popstate', handleUrl);
-        return () => window.removeEventListener('popstate', handleUrl);
-    }, []);
+        fetch(`/api/memory/chunks/${id}`)
+            .then(res => {
+                if (!res.ok) throw new Error('Chunk not found');
+                return res.json();
+            })
+            .then(data => setChunk(data))
+            .catch(() => setError(`Failed to load chunk: ${id}`));
+    }, [id]);
+
+    if (error) return <div class="error-message">{error}</div>;
+    if (!chunk) return <div class="memory-loading">Loading chunk...</div>;
+
+    return <ChunkDetail chunk={chunk} />;
+}
+
+function SearchView({ q }: RouteProps & { q?: string }) {
+    const [results, setResults] = useState<Chunk[]>([]);
+    const [loading, setLoading] = useState(false);
+    const query = q || '';
+
+    useEffect(() => {
+        if (query.length < 3) {
+            setResults([]);
+            return;
+        }
+
+        setLoading(true);
+        fetch(`/api/memory/search?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                setResults(data);
+                setLoading(false);
+            })
+            .catch(() => {
+                setResults([]);
+                setLoading(false);
+            });
+    }, [query]);
+
+    return <SearchResults query={query} results={results} loading={loading} />;
+}
+
+export function MemoryApp() {
+    const [chunks, setChunks] = useState<ChunkListItem[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [currentPath, setCurrentPath] = useState(window.location.pathname);
 
     // Fetch chunk list
     useEffect(() => {
@@ -43,75 +94,24 @@ export function MemoryApp() {
                 setChunks(data);
                 setLoading(false);
             })
-            .catch(err => {
+            .catch(() => {
                 setError('Failed to load chunks');
                 setLoading(false);
             });
     }, []);
 
-    // Fetch selected chunk details
-    useEffect(() => {
-        if (!selectedId) return;
-
-        fetch(`/api/memory/chunks/${selectedId}`)
-            .then(res => {
-                if (!res.ok) throw new Error('Chunk not found');
-                return res.json();
-            })
-            .then(data => setSelectedChunk(data))
-            .catch(err => {
-                setError(`Failed to load chunk: ${selectedId}`);
-                setSelectedChunk(null);
-            });
-    }, [selectedId]);
-
-    const navigateToChunk = (id: string) => {
-        setSelectedId(id);
-        window.history.pushState({}, '', `/memory/${id}`);
+    // Get selected chunk ID from current path
+    const getSelectedId = () => {
+        const match = currentPath.match(/\/memory\/([a-f0-9]{6})/);
+        return match ? match[1] : null;
     };
 
-    const navigateToList = () => {
-        setSelectedId(null);
-        setSelectedChunk(null);
-        window.history.pushState({}, '', '/memory');
+    const handleRouteChange = (e: { url: string }) => {
+        setCurrentPath(e.url.split('?')[0]);
     };
 
-    const formatDate = (iso: string) => {
-        const date = new Date(iso);
-        return date.toLocaleString();
-    };
-
-    const getTypeColor = (type: string) => {
-        const colors: Record<string, string> = {
-            framework: '#9b6bff',
-            insight: '#6b9fff',
-            fact: '#6bff9f',
-            log: '#888',
-            emotional: '#ff9b6b',
-            goal: '#ff6b9b',
-            question: '#ffff6b',
-        };
-        return colors[type] || '#888';
-    };
-
-    const getStatusColor = (status: string) => {
-        const colors: Record<string, string> = {
-            active: '#6bff9f',
-            dormant: '#888',
-            review: '#ffff6b',
-            archived: '#ff6b6b',
-        };
-        return colors[status] || '#888';
-    };
-
-    const getEpistemicColor = (epistemic: string) => {
-        const colors: Record<string, string> = {
-            established: '#6bff9f',
-            working: '#6b9fff',
-            speculative: '#ffff6b',
-            deprecated: '#ff6b6b',
-        };
-        return colors[epistemic] || '#888';
+    const handleSearch = (query: string) => {
+        route(`/memory/search?q=${encodeURIComponent(query)}`);
     };
 
     if (loading) {
@@ -124,173 +124,18 @@ export function MemoryApp() {
 
     return (
         <div class="app-container">
-            <aside class="memory-sidebar">
-                <header class="memory-sidebar-header">
-                    <h1 onClick={navigateToList} style={{ cursor: 'pointer' }}>Memory Viewer</h1>
-                    <span class="memory-chunk-count">{chunks.length} chunks</span>
-                </header>
-                <div class="memory-chunk-list">
-                    {chunks.map(chunk => (
-                        <div
-                            key={chunk.id}
-                            class={`memory-chunk-item ${selectedId === chunk.id ? 'selected' : ''}`}
-                            onClick={() => navigateToChunk(chunk.id)}
-                        >
-                            <div class="memory-chunk-item-header">
-                                <span class="memory-chunk-id">{chunk.id}</span>
-                                <span
-                                    class="memory-chunk-type"
-                                    style={{ color: getTypeColor(chunk.type) }}
-                                >
-                                    {chunk.type}
-                                </span>
-                            </div>
-                            <div class="memory-chunk-summary">{chunk.summary}</div>
-                            <span
-                                class="memory-chunk-status"
-                                style={{ color: getStatusColor(chunk.status) }}
-                            >
-                                {chunk.status}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </aside>
+            <Sidebar
+                chunks={chunks}
+                selectedId={getSelectedId()}
+                onSearch={handleSearch}
+            />
             <main class="memory-main-content">
                 {error && <div class="error-message">{error}</div>}
-                {!selectedChunk && !error && (
-                    <div class="memory-no-selection">
-                        <h2>Select a chunk from the sidebar</h2>
-                        <p>Or navigate to /memory/[chunk-id] directly</p>
-                    </div>
-                )}
-                {selectedChunk && (
-                    <article class="memory-chunk-detail">
-                        <header class="memory-chunk-detail-header">
-                            <h2>{selectedChunk.summary}</h2>
-                            <span class="memory-chunk-id-large">{selectedChunk.id}</span>
-                        </header>
-
-                        <section class="memory-meta-section">
-                            <h3>Classification</h3>
-                            <div class="memory-meta-grid">
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Type</span>
-                                    <span
-                                        class="memory-meta-value memory-badge"
-                                        style={{ backgroundColor: getTypeColor(selectedChunk.type) + '33', color: getTypeColor(selectedChunk.type) }}
-                                    >
-                                        {selectedChunk.type}
-                                    </span>
-                                </div>
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Epistemic</span>
-                                    <span
-                                        class="memory-meta-value memory-badge"
-                                        style={{ backgroundColor: getEpistemicColor(selectedChunk.epistemic) + '33', color: getEpistemicColor(selectedChunk.epistemic) }}
-                                    >
-                                        {selectedChunk.epistemic}
-                                    </span>
-                                </div>
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Status</span>
-                                    <span
-                                        class="memory-meta-value memory-badge"
-                                        style={{ backgroundColor: getStatusColor(selectedChunk.status) + '33', color: getStatusColor(selectedChunk.status) }}
-                                    >
-                                        {selectedChunk.status}
-                                    </span>
-                                </div>
-                            </div>
-                        </section>
-
-                        <section class="memory-meta-section">
-                            <h3>Tags</h3>
-                            <div class="memory-tags">
-                                {selectedChunk.surface_tags.map(tag => (
-                                    <span key={tag} class="memory-tag">{tag}</span>
-                                ))}
-                                {selectedChunk.surface_tags.length === 0 && (
-                                    <span class="memory-no-tags">No tags</span>
-                                )}
-                            </div>
-                        </section>
-
-                        {selectedChunk.related.length > 0 && (
-                            <section class="memory-meta-section">
-                                <h3>Related Chunks</h3>
-                                <div class="memory-related-list">
-                                    {selectedChunk.related.map(rel => (
-                                        <div
-                                            key={rel.id}
-                                            class="memory-related-item"
-                                            onClick={() => navigateToChunk(rel.id)}
-                                        >
-                                            <span class="memory-related-id">{rel.id}</span>
-                                            <span class="memory-related-reason">{rel.reason}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </section>
-                        )}
-
-                        <section class="memory-meta-section">
-                            <h3>Timestamps</h3>
-                            <div class="memory-meta-grid">
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Created</span>
-                                    <span class="memory-meta-value">{formatDate(selectedChunk.created)}</span>
-                                </div>
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Updated</span>
-                                    <span class="memory-meta-value">{formatDate(selectedChunk.updated)}</span>
-                                </div>
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Accessed</span>
-                                    <span class="memory-meta-value">{formatDate(selectedChunk.accessed)}</span>
-                                </div>
-                                {selectedChunk.expires && (
-                                    <div class="memory-meta-item">
-                                        <span class="memory-meta-label">Expires</span>
-                                        <span class="memory-meta-value">{formatDate(selectedChunk.expires)}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </section>
-
-                        <section class="memory-meta-section">
-                            <h3>Metrics</h3>
-                            <div class="memory-meta-grid">
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Retrieved</span>
-                                    <span class="memory-meta-value">{selectedChunk.retrieved_count} times</span>
-                                </div>
-                                <div class="memory-meta-item">
-                                    <span class="memory-meta-label">Marked Relevant</span>
-                                    <span class="memory-meta-value">{selectedChunk.relevant_count} times</span>
-                                </div>
-                                {selectedChunk.last_relevant_date && (
-                                    <div class="memory-meta-item">
-                                        <span class="memory-meta-label">Last Relevant</span>
-                                        <span class="memory-meta-value">{formatDate(selectedChunk.last_relevant_date)}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </section>
-
-                        {selectedChunk.context_notes && (
-                            <section class="memory-meta-section">
-                                <h3>Context Notes</h3>
-                                <div class="memory-context-notes">{selectedChunk.context_notes}</div>
-                            </section>
-                        )}
-
-                        <section class="memory-content-section">
-                            <h3>Content</h3>
-                            <div class="memory-chunk-content">{selectedChunk.content}</div>
-                        </section>
-                    </article>
-                )}
+                <Router onChange={handleRouteChange}>
+                    <ListView path="/memory" />
+                    <SearchView path="/memory/search" />
+                    <ChunkView path="/memory/:id" />
+                </Router>
             </main>
         </div>
     );

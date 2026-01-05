@@ -45,6 +45,28 @@ export function createMemoryWebRouter(): Router {
         }
     });
 
+    // API: Search chunks
+    router.get('/api/memory/search', async (req: Request, res: Response) => {
+        try {
+            const query = req.query.q as string;
+            if (!query || query.length < 3) {
+                res.json([]);
+                return;
+            }
+
+            const store = await getMemoryStore();
+            // Query returns ChunkMeta (no content), so we need to get full chunks
+            const metas = await store.query(query, 32, false);
+            const ids = metas.map(m => m.id);
+            const chunks = await store.getChunks(ids);
+
+            res.json(chunks);
+        } catch (err) {
+            console.error('Error searching chunks:', err);
+            res.status(500).json({ error: 'Failed to search chunks' });
+        }
+    });
+
     // Static file serving and SPA routes are now handled by packages/app
 
     return router;
