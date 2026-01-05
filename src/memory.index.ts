@@ -234,7 +234,7 @@ export class MemoryStore {
      * Query for similar chunks (returns metadata only, no content)
      * Use getChunks() to retrieve full content for specific IDs
      */
-    async query(searchText: string, limit: number = 10): Promise<ChunkMeta[]> {
+    async query(searchText: string, limit: number = 10, markAccess = true): Promise<ChunkMeta[]> {
         // Search in embedding index
         const results = await this.index.query(searchText, limit);
         const ids = results.map(r => r.id);
@@ -246,17 +246,19 @@ export class MemoryStore {
         // Read full chunks
         const chunks = await this.storage.readMany(ids);
 
-        // Update retrieved_count and accessed for each chunk
-        const now = new Date().toISOString();
-        for (const chunk of chunks) {
-            chunk.retrieved_count++;
-            chunk.accessed = now;
-            await this.storage.write(chunk);
-        }
+        if (markAccess) {
+            // Update retrieved_count and accessed for each chunk
+            const now = new Date().toISOString();
+            for (const chunk of chunks) {
+                chunk.retrieved_count++;
+                chunk.accessed = now;
+                await this.storage.write(chunk);
+            }
 
-        // Audit log
-        await this.audit.logQuery(searchText, ids);
-        await this.audit.logRetrieve(ids);
+            // Audit log
+            await this.audit.logQuery(searchText, ids);
+            await this.audit.logRetrieve(ids);
+        }
 
         // Return metadata only (strip content)
         return chunks.map(({ content, ...meta }) => meta);
