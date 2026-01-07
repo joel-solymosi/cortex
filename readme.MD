@@ -33,13 +33,12 @@ The result: a PKM system that maintains itself, and knowledge that surfaces when
 git clone https://github.com/joel-solymosi/cortex
 cd cortex
 npm install
-npm run start
 ```
 
 ### Running the Server
 
 ```bash
-npm start
+npm run start
 ```
 
 Environment options:
