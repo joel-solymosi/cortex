@@ -98,17 +98,17 @@ export class MemoryStore {
             },
         });
 
-        this.watcher.on('add', async (filePath) => {
+        this.watcher.on('add', async (filePath: string) => {
             console.log(`File added externally: ${path.basename(filePath)}`);
             await this.handleFileChange(filePath);
         });
 
-        this.watcher.on('change', async (filePath) => {
+        this.watcher.on('change', async (filePath: string) => {
             console.log(`File changed externally: ${path.basename(filePath)}`);
             await this.handleFileChange(filePath);
         });
 
-        this.watcher.on('unlink', async (filePath) => {
+        this.watcher.on('unlink', async (filePath: string) => {
             console.log(`File deleted externally: ${path.basename(filePath)}`);
             await this.handleFileDelete(filePath);
         });

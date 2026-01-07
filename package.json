@@ -13,7 +13,7 @@
     "build:web": "npx tsx web/esbuild.config.ts",
     "watch:web": "npx tsx web/esbuild.config.ts --watch",
     "serve": "npx tsx src/server.ts",
-    "dev": "concurrently -n web,server -c cyan,green \"pnpm watch:web\" \"pnpm serve\""
+    "start": "concurrently -n web,server -c cyan,green \"pnpm watch:web\" \"pnpm serve\""
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.11.4",

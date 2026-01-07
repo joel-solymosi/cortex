@@ -65,7 +65,7 @@ All write operations happen here, batched:
 
 When a chunk informs your response, cite with markdown link:
 ```
-Based on our equity evaluation framework [ref:chunk_abc123](http://localhost:8010/memory/chunk_abc123), ...
+Based on our startup evaluation framework [ref:chunk_abc123](http://localhost:8010/memory/chunk_abc123), ...
 ```
 
 This serves three purposes:
@@ -155,7 +155,7 @@ context_notes: [why created, from what conversation]
 These are free-form and emergent. Look at existing chunks' surface_tags to maintain consistency. Good surface tags complete the sentence: "Surface this chunk when discussing ___."
 
 Examples:
-- `["startup equity", "evaluating job offers", "negotiation"]`
+- `["startup evaluation", "evaluating job offers", "negotiation"]`
 - `["emotional patterns", "frustration triggers", "self-awareness"]`
 - `["AI memory systems", "PKM", "retrieval architecture"]`
 

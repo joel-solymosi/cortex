@@ -33,7 +33,7 @@ The result: a PKM system that maintains itself, and knowledge that surfaces when
 git clone https://github.com/joel-solymosi/cortex
 cd cortex
 npm install
-npm run
+npm run start
 ```
 
 ### Running the Server
@@ -64,8 +64,8 @@ Add to your `claude_desktop_config.json`:
 {
   "mcpServers": {
     "memory": {
-      "type": "url",
-      "url": "http://localhost:8010/mcp/memory"
+		 "command": "npx",
+         "args": ["-y", "mcp-remote", "http://localhost:8010/mcp/memory"]
     }
   }
 }
@@ -83,7 +83,6 @@ Copy the contents of `prompt.md` into your system prompt (or use Claude's "Proje
 - Citation format for transparency
 - Quality signals for corpus maintenance
 
-> ⚠️ **The prompt is opinionated.** It assumes you want the AI to actively garden your knowledge base during conversation. If you want read-only memory, modify the prompt to remove write operations.
 
 ---
 
