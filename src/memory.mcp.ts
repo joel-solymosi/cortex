@@ -1,21 +1,9 @@
 // MCP server for memory system
 
-import path from 'path';
-import { fileURLToPath } from 'url';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { z } from 'zod';
-import { isMainEntry } from '@gym/helpers/common';
-import { createServer } from '@gym/mcp-core';
-import { getMemoryStore } from './memory.index';
-import { ChunkType, EpistemicStatus, LifecycleStatus } from './memory.types';
-import { createMemoryWebRouter } from './memory.web';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Default data directory (relative to this file)
-const DEFAULT_DATA_DIR = path.join(__dirname, '..', 'data');
+import { getMemoryStore } from './memory.index.js';
 
 // Zod schemas for validation
 const ChunkTypeSchema = z.enum(['framework', 'insight', 'fact', 'log', 'emotional', 'goal', 'question']);
@@ -44,21 +32,12 @@ export const mcpServer = new McpServer({
     version: '1.0.0',
 });
 
-// Initialize memory store lazily
-let storeInitialized = false;
+// Get memory store (must be initialized by server.ts first)
 async function ensureStore() {
-    if (!storeInitialized) {
-        await getMemoryStore(process.env.MEMORY_DATA_DIR || DEFAULT_DATA_DIR);
-        storeInitialized = true;
-    }
     return getMemoryStore();
 }
 
-// Helper to format chunk for response
-function formatChunk(chunk: any): string {
-    return JSON.stringify(chunk, null, 2);
-}
-
+// Helper to format chunks for response
 function formatChunks(chunks: any[]): string {
     return JSON.stringify(chunks, null, 2);
 }
@@ -294,21 +273,3 @@ mcpServer.tool(
     }
 );
 
-// ============================================================================
-// Main entry point
-// ============================================================================
-
-if (isMainEntry(import.meta.url)) {
-    (async () => {
-        // Pre-initialize the memory store
-        console.log('Starting memory MCP server...');
-        await ensureStore();
-
-        // Import web router
-
-        const webRouter = createMemoryWebRouter();
-
-        await createServer({ 'memory': mcpServer }, [webRouter]);
-        console.log('Memory web viewer available at: http://localhost:8010/memory');
-    })();
-}

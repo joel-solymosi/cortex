@@ -1,27 +1,45 @@
 {
   "name": "@gym/mcp-memory",
   "version": "1.0.0",
+  "description": "Semantic memory system with MCP interface",
   "type": "module",
-  "main": "./src/memory.mcp.ts",
+  "main": "./src/server.ts",
   "exports": {
-    ".": "./src/memory.mcp.ts",
+    ".": "./src/server.ts",
     "./web": "./web/src/index.ts",
     "./memory.web": "./src/memory.web.ts"
   },
   "scripts": {
     "build:web": "npx tsx web/esbuild.config.ts",
     "watch:web": "npx tsx web/esbuild.config.ts --watch",
-    "serve": "npx tsx src/memory.mcp.ts",
+    "serve": "npx tsx src/server.ts",
     "dev": "concurrently -n web,server -c cyan,green \"pnpm watch:web\" \"pnpm serve\""
   },
   "dependencies": {
-    "@gym/mcp-core": "workspace:*",
-    "@gym/helpers": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.11.4",
+    "@xenova/transformers": "^2.17.2",
+    "body-parser": "^2.2.0",
+    "chokidar": "^4.0.3",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "find-config": "^1.0.0",
+    "hnswlib-node": "^3.0.0",
     "preact": "^10.26.9",
-    "preact-router": "^4.1.2"
+    "preact-router": "^4.1.2",
+    "yaml": "^2.8.0",
+    "zod": "^3.25.30"
   },
   "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/compression": "^1.7.5",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.15.21",
     "concurrently": "^9.1.2",
-    "esbuild": "^0.27.2"
+    "esbuild": "^0.27.2",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3"
   }
 }

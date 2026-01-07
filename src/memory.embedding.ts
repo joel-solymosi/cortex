@@ -2,7 +2,7 @@
 
 import { pipeline } from '@xenova/transformers';
 import hnswlib from 'hnswlib-node';
-import { isMainEntry } from '@gym/helpers/common';
+import { fileURLToPath } from 'url';
 
 interface TransformerTensor {
     dims: number[];
@@ -237,7 +237,7 @@ export class SemanticIndex {
 // Unit Tests (run with: npx tsx memory.embedding.ts)
 // =============================================================================
 
-if (isMainEntry(import.meta.url)) {
+if (fileURLToPath(import.meta.url).toLowerCase() === process.argv[1].toLowerCase()) {
     (async () => {
         console.log('=== SemanticIndex Unit Tests ===\n');
 

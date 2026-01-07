@@ -17,7 +17,7 @@ Cortex fixes this by making an LLM the primary interface to your knowledge base.
 
 The result: a PKM system that maintains itself, and knowledge that surfaces when it's relevant rather than when you remember to look for it.
 
-**[Read the full design philosophy →](linkedin-post-link)**
+**[Read the full design paper here →](linkedin-post-link)**
 
 ---
 

@@ -6,9 +6,9 @@ import crypto from 'crypto';
 import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
 import { Chunk, ChunkRelation } from './memory.types';
 
-import { isMainEntry } from '@gym/helpers/common';
 import { getChunkDefaults } from './memory.types';
 import os from 'os';
+import { fileURLToPath } from 'url';
 
 const FRONTMATTER_DELIMITER = '---';
 
@@ -280,7 +280,7 @@ export class ChunkStorage {
 // =============================================================================
 
 
-if (isMainEntry(import.meta.url)) {
+if (fileURLToPath(import.meta.url).toLowerCase() === process.argv[1].toLowerCase()) {
     (async () => {
         console.log('=== Storage Unit Tests ===\n');
 
