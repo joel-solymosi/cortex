@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="docs/cortex.png.png" width="800px" alt="Cortex - memory layer for AI">
+    <img src="docs/cortex.png" width="800px" alt="Cortex - memory layer for AI">
 </p>
 
 
@@ -7,7 +7,7 @@
 
 > Persistent memory for LLM-powered co-thinking. MCP-native. Action-oriented.
 
-## Why This Exists
+## Why Cortex
 
 Every serious PKM system eventually becomes a graveyard. You capture insights, tag them thoughtfully, build elaborate folder structures-and three years later you have 10,000 notes you've forgotten exist. The system was supposed to compound. Instead, it accumulated.
 
