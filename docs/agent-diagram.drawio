@@ -7,7 +7,7 @@
         <mxCell id="sgy-C4wP7yo8cXIig-Bx-2" value="Query formulation" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="130" y="100" width="160" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="sgy-C4wP7yo8cXIig-Bx-3" value="MCP Query" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-3" value="MCP query(search_text)" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="130" y="140" width="160" height="30" as="geometry" />
         </mxCell>
         <mxCell id="sgy-C4wP7yo8cXIig-Bx-4" value="Results with meta-info" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
@@ -26,7 +26,25 @@
           <mxGeometry x="130" y="400" width="160" height="30" as="geometry" />
         </mxCell>
         <mxCell id="sgy-C4wP7yo8cXIig-Bx-9" value="User Response" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="130" y="440" width="160" height="100" as="geometry" />
+          <mxGeometry x="130" y="480" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-10" value="MCP Server" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="370" y="100" width="90" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.007;entryY=0.132;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=block;startFill=1;" edge="1" parent="1" source="sgy-C4wP7yo8cXIig-Bx-3" target="sgy-C4wP7yo8cXIig-Bx-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.009;entryY=0.329;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="sgy-C4wP7yo8cXIig-Bx-5" target="sgy-C4wP7yo8cXIig-Bx-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-13" value="MCP update_chunk(...)" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="130" y="440" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.009;entryY=0.766;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="sgy-C4wP7yo8cXIig-Bx-8" target="sgy-C4wP7yo8cXIig-Bx-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sgy-C4wP7yo8cXIig-Bx-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=-0.016;entryY=0.865;entryDx=0;entryDy=0;entryPerimeter=0;startArrow=block;startFill=1;" edge="1" parent="1" source="sgy-C4wP7yo8cXIig-Bx-13" target="sgy-C4wP7yo8cXIig-Bx-10">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
