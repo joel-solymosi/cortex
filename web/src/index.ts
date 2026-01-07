@@ -1,1 +1,0 @@
-export { MemoryApp } from './MemoryApp';

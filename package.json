@@ -6,7 +6,7 @@
   "main": "./src/server.ts",
   "exports": {
     ".": "./src/server.ts",
-    "./web": "./web/src/index.ts",
+    "./web": "./web/src/MemoryApp.tsx",
     "./memory.web": "./src/memory.web.ts"
   },
   "scripts": {

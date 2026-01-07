@@ -49,7 +49,8 @@ async function main() {
     app.get('/memory', (_req: Request, res: Response) => {
         res.sendFile(webIndexHtml);
     });
-    app.get('/memory/*', (_req: Request, res: Response) => {
+    // Express 5 requires named wildcard params: {*name}
+    app.get('/memory/{*path}', (_req: Request, res: Response) => {
         res.sendFile(webIndexHtml);
     });
 

@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isDev = process.argv.includes('--watch');
 
 const ctx = await esbuild.context({
-    entryPoints: [path.join(__dirname, 'src/index.ts')],
+    entryPoints: [path.join(__dirname, 'src/index.tsx')],
     bundle: true,
     outfile: path.join(__dirname, 'dist/bundle.js'),
     minify: !isDev,
